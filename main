@@ -1,0 +1,317 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+typedef struct {
+  char carc[20];
+  int token;
+  }Asig_Tok;
+  Asig_Tok  atoken[87]={
+
+
+	  	{"{",0},
+        {"}",1},
+        {"[",2},
+        {"]",3},
+        {"(",4},
+        {")",5},
+		{"\\",6},
+        {".",7},
+		{":",8},
+		{";",9},
+		{",",10},
+        {"\'",11},
+		{"\"",12},
+        {"+",13},{"++",14},{"+=",15},
+		{"-",16},{"--",17},{"-=",18},{"->",19},
+		{"*",20},{"*=",21},
+		{"/",22},{"/=",23},
+		{"%",24},{"%=",25},
+		{"=",26},{"==",27},
+		{"<",28},{"<=",29},
+		{">",30},{">=",31},
+        {"!",32},{"!=",33},
+		{"|",34},{"||",35},
+        {"&&",36},{"&",37},
+		{"#",38},
+		{"if",39},{"else",40},
+		{"switch",41},{"case",42},
+        {"break",43},
+		{"do",44},{"while",45},
+		{"for",46},
+		{"define",47},
+        {"include",48},
+		{"return",49},
+		{"default",50},
+
+		{"char",51},
+		{"int",52},
+        {"float",53},
+		{"const",54},
+		{"long",55},
+		{"double",56},
+        {"void",57},
+        {"struct",58},
+
+		{"clrscr",59},
+		{"printf",60},
+		{"cprintf",61},
+		{"textcolor",62},
+		{"textbackground",63},
+		{"flushall",64},
+		{"scanf",65},
+		{"getch",66},
+		{"getche",67},
+		{"pow",68},
+		{"sin",69},
+		{"cos",70},
+        {"tan",71},
+		{"sqrt",72},
+		{"gotoxy",73},
+		{"short",74},
+		{"strcpy",75},
+		{"main",86},
+};
+
+
+//estructura de letrasssss
+struct node
+{
+char inf[40];
+int token;
+struct node *sig;
+};
+typedef struct node nodo;
+typedef nodo *tipolista;
+
+
+
+// lista de letras
+void letras(tipolista *p,char *n)
+{
+tipolista l;
+int i,e,b;
+char m[40];
+i=0;
+e=0;
+while(*n!=NULL)
+{
+m[i]=*n;
+i++;
+n++;
+m[i]='\0';
+
+}
+
+l=(*p);
+if((*p)==NULL)
+{
+(*p)=(nodo*)malloc(sizeof(nodo));
+strcpy( (*p)->inf,m);
+while(e<=87)
+{
+
+b=strcmp(atoken[e].carc,m);
+if(b==0)
+{
+  (*p)->token=(atoken[e].token);
+  e=88;
+}
+else
+    e++;
+}
+(*p)->sig=NULL;
+}
+else
+{
+(*p)=(nodo*)malloc(sizeof(nodo));
+(*p)->sig=l;
+strcpy( (*p)->inf,m);
+while(e<=87)
+{
+b=strcmp(atoken[e].carc,m);
+
+if(b==0)
+{
+  (*p)->token=atoken[e].token;
+  e=88;
+}
+else
+    e++;
+}
+}
+}
+
+
+
+
+void tipo_dedatos(tipolista *t,char *p)
+{//0
+
+int i;
+char m[40];
+
+ while((*p)==' ')
+         p++;
+while((*p)!='\0')
+{//1
+
+
+     if((*p)!='\n'&&(*p)!=' ')
+     {//3
+
+
+if((*p)>=97&&(*p)<=122||(*p)==241)
+  {//2
+
+   i=0;
+   while((*p)>=97&&(*p)<=122||(*p)==241&&(*p)!=' ')
+        {//3
+         m[i]=*p;
+         i++;
+         p++;
+         m[i]='\0';
+         }//3
+          letras(&(*t),m);
+   }//2
+    else
+
+       {//4
+
+
+       if((*p)>=48&&(*p)<=57)
+         {//5
+
+         i=0;
+         while((*p)>=48&&(*p)<=57&&(*p)!=' ')
+              {//6
+               m[i]=*p;
+               i++;
+               p++;
+               m[i]='\0';
+              }//6
+           letras(&(*t),m);
+          }//5
+           else
+               {//7
+                if((*p)!='\n'&&(*p)!=' ')
+                  {//8
+
+
+                  if((*p)==34)
+                   {//9
+                    i=0;
+                    m[i]=*p;
+                    i++;
+                    m[i]='\0';
+                    letras(&(*t),m);
+                    p++;
+                    i=0;
+                  if((*p)!=' '&&(*p)!='\0')
+                  {
+                   while((*p)!=34&&(*p)!='\n')
+                        {//10
+                         m[i]=*p;
+                         i++;
+                         p++;
+                         m[i]='\0';
+                        }//10
+                  }
+                         if(i!=0)
+                          letras(&(*t),m);
+
+                        if((*p)==34)
+                         {//11
+                         i=0;
+                         m[i]=*p;
+                         i++;
+                         m[i]='\0';
+
+                         letras(&(*t),m);
+                         p++;
+                         }//11
+                   }//9
+                     else
+                        {//12
+                         if((*p)!='\n'&&(*p)!=' ')
+                         {
+
+
+                         i=0;
+                         m[i]=*p;
+                         i++;
+                         m[i]='\0';
+                         letras(&(*t),m);
+                         p++;
+                         }
+                         }//12
+                     }//8
+                   }//7
+                   }//4
+     }//3
+
+       else
+        p++;
+                      }//1
+
+}//0
+
+
+
+//impresion letras
+void imprimirl(tipolista *p)
+{
+tipolista n;
+n=(*p);
+printf("INFORMACION DE NODOS DE LAS LETRAS\n");
+
+while(n!=NULL)
+{
+printf("|%s T=%d|\n",n->inf,n->token);
+
+n=n->sig;
+}
+
+}
+
+
+int main()
+{
+FILE* archivo;
+char caracteres[100],caracter;
+
+tipolista lista=NULL;
+
+
+
+
+archivo=fopen("prueba1.txt","r");
+if(archivo == NULL)
+ 		exit(1);
+
+
+while(feof(archivo)== 0)
+{
+
+fgets(caracteres,100,archivo);
+
+tipo_dedatos(&lista,caracteres);
+
+
+
+}
+
+imprimirl(&lista);
+
+
+
+system("PAUSE");
+
+
+
+fclose(archivo);
+free(lista);
+return 0;
+
+}
